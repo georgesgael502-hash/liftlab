@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LiftLab — Free Gym & Fitness Tools | Macros, 1RM, Calories, Body Fat & More</title>
+  <meta name="description" content="Free fitness calculators for gym-goers: macro calculator, 1RM calculator, TDEE & calorie calculator, body fat estimator, workout split planner, protein intake, Wilks score and more. No ads, no signup."/>
+  <meta name="keywords" content="macro calculator, 1rm calculator, TDEE calculator, calorie calculator, body fat calculator, workout split, protein calculator, bulking calculator, cutting calories, gym tools, fitness calculator, one rep max, wilks score"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://liftlab.vercel.app/"/>
+  <meta property="og:title" content="LiftLab — Free Gym & Fitness Calculators"/>
+  <meta property="og:description" content="10 free tools for serious lifters. Macros, 1RM, TDEE, body fat & more. No signup."/>
+  <meta property="og:type" content="website"/>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"LiftLab","url":"https://liftlab.vercel.app","description":"Free fitness tools for gym-goers and serious lifters"}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0d0d0d;--bg2:#141414;--card:#1a1a1a;--card2:#202020;
+      --border:#2e2e2e;--red:#e8192c;--red2:#ff3347;
+      --chalk:#f0ebe2;--muted:#666;--muted2:#444;
+      --fd:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--chalk);font-family:var(--fb);min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
+    body>*{position:relative;z-index:1}
+
+    /* NAV */
+    nav{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;border-bottom:1px solid var(--border);background:rgba(13,13,13,.96);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+    .logo{font-family:var(--fd);font-size:1.9rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+    .logo span{color:var(--red)}
+    .nav-tag{font-family:var(--fd);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:.25rem .7rem;border-radius:2px}
+
+    /* HERO */
+    .hero{padding:5rem 3rem 4rem;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+    .hero::after{content:'LIFT';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-family:var(--fd);font-size:22vw;font-weight:900;color:rgba(255,255,255,.018);letter-spacing:-.02em;pointer-events:none;line-height:1;text-transform:uppercase;white-space:nowrap}
+    .hero-label{font-family:var(--fd);font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:1.5rem;display:flex;align-items:center;gap:.8rem}
+    .hero-label::before{content:'';display:block;width:2.5rem;height:2px;background:var(--red)}
+    h1{font-family:var(--fd);font-size:clamp(4rem,10vw,9rem);font-weight:900;line-height:.88;letter-spacing:-.01em;text-transform:uppercase;margin-bottom:2rem}
+    h1 .red{color:var(--red);display:block}
+    h1 .outline{-webkit-text-stroke:2px var(--chalk);color:transparent;display:block}
+    .hero-bottom{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem}
+    .hero-sub{font-size:1rem;color:var(--muted);max-width:420px;line-height:1.65}
+    .hero-stats{display:flex;gap:3rem}
+    .hstat-n{font-family:var(--fd);font-size:3rem;font-weight:900;color:var(--chalk);letter-spacing:-.02em;line-height:1}
+    .hstat-n span{color:var(--red)}
+    .hstat-l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.2rem}
+
+    /* TOOLS */
+    .tools-wrap{padding:3rem;max-width:1200px;margin:0 auto}
+    .tw-head{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem}
+    .tw-label{font-family:var(--fd);font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .tw-line{flex:1;height:1px;background:var(--border)}
+    .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)}
+    .tool-card{background:var(--card);padding:2rem;cursor:pointer;transition:background .12s;position:relative;text-align:left;width:100%;font-family:var(--fb);color:var(--chalk);border:none;overflow:hidden}
+    .tool-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transform-origin:bottom;transition:transform .2s ease}
+    .tool-card:hover{background:var(--card2)}.tool-card:hover::before{transform:scaleY(1)}
+    .tc-num{font-family:var(--fd);font-size:.65rem;font-weight:700;color:var(--muted2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.5rem}
+    .tc-icon{font-size:1.6rem;margin-bottom:.8rem;display:block;line-height:1}
+    .tc-name{font-family:var(--fd);font-size:1.35rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:var(--chalk);margin-bottom:.4rem;line-height:1.1}
+    .tc-desc{font-size:.83rem;color:var(--muted);line-height:1.5}
+    .tc-badge{display:inline-block;margin-top:1.2rem;font-family:var(--fd);font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:.15rem .5rem;border-radius:1px}
+
+    /* PANEL */
+    .pw{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;opacity:0;transition:opacity .2s}
+    .pw.open{pointer-events:all;opacity:1}
+    .pbg{position:absolute;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(6px)}
+    .panel{position:relative;background:var(--card);border-top:3px solid var(--red);border-left:1px solid var(--border);border-right:1px solid var(--border);width:100%;max-width:660px;max-height:92vh;overflow-y:auto;transform:translateY(40px);transition:transform .28s cubic-bezier(.16,1,.3,1)}
+    .pw.open .panel{transform:translateY(0)}
+    .phead{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:2}
+    .ptitle{font-family:var(--fd);font-size:1.3rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+    .px{width:36px;height:36px;background:var(--border);color:var(--chalk);border:none;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:background .12s;font-family:var(--fb)}
+    .px:hover{background:var(--red)}
+    .pbody{padding:2rem}
+
+    /* FORM */
+    .field{margin-bottom:1.1rem}
+    label{display:block;font-family:var(--fd);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.45rem}
+    input,select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:0;color:var(--chalk);font-family:var(--fb);font-size:1rem;padding:.75rem 1rem;outline:none;transition:border-color .15s;-webkit-appearance:none}
+    input:focus,select:focus{border-color:var(--red)}
+    option{background:var(--card)}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+    .btn{width:100%;padding:.9rem;margin-top:.6rem;background:var(--red);color:var(--chalk);border:none;font-family:var(--fd);font-size:1.1rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .12s}
+    .btn:hover{background:var(--red2)}
+    .rbox{margin-top:1.5rem;background:var(--bg2);border-left:3px solid var(--red);padding:1.5rem}
+    .rl{font-family:var(--fd);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.4rem}
+    .rv{font-family:var(--fd);font-size:2.8rem;font-weight:900;letter-spacing:-.02em;color:var(--chalk);line-height:1}
+    .rv .unit{font-size:1.2rem;color:var(--muted);font-weight:700}
+    .rv .acc{color:var(--red)}
+    .rd{font-size:.85rem;color:var(--muted);margin-top:.6rem;line-height:1.6}
+
+    /* Macro bars */
+    .macro-bars{margin-top:1rem}
+    .mbar{margin-bottom:.8rem}
+    .mbar-top{display:flex;justify-content:space-between;margin-bottom:.3rem}
+    .mbar-lbl{font-family:var(--fd);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+    .mbar-val{font-family:var(--fd);font-weight:800;font-size:.9rem}
+    .mbar-track{height:5px;background:var(--border);overflow:hidden}
+    .mbar-fill{height:100%;transition:width .6s ease}
+
+    /* 1RM Table */
+    .pr-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.85rem}
+    .pr-table th{font-family:var(--fd);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.5rem .8rem;border-bottom:1px solid var(--border);text-align:left}
+    .pr-table td{padding:.55rem .8rem;border-bottom:1px solid var(--muted2);color:var(--chalk)}
+    .pr-table tr:last-child td{border-bottom:none}
+    .pr-table .hi{color:var(--red);font-family:var(--fd);font-weight:800;font-size:1rem}
+
+    /* Split days */
+    .split-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:1rem 0}
+    .sday{background:var(--bg2);border:1px solid var(--border);padding:.6rem .2rem;text-align:center;font-family:var(--fd);font-size:.62rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:default}
+    .sday.lift{background:var(--red);color:var(--chalk);border-color:var(--red)}
+    .sday.rest{color:var(--muted)}
+
+    /* Recovery checkboxes */
+    .mg-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-top:.3rem}
+    .mg-item{display:flex;align-items:center;gap:.5rem;color:var(--chalk);font-family:var(--fb);font-size:.85rem;cursor:pointer;padding:.4rem .6rem;border:1px solid var(--border);transition:border-color .12s}
+    .mg-item.sel{border-color:var(--red)}
+    .mg-item input{width:auto;background:transparent;border:none;padding:0;accent-color:var(--red)}
+
+    /* Footer */
+    footer{border-top:1px solid var(--border);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+    .flogo{font-family:var(--fd);font-weight:900;font-size:1.2rem;letter-spacing:.06em;text-transform:uppercase}
+    .flogo span{color:var(--red)}
+    .ftxt{font-size:.78rem;color:var(--muted);font-family:var(--fd);letter-spacing:.05em;text-transform:uppercase}
+
+    /* Animations */
+    @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .tool-card{animation:slideUp .35s ease both}
+    .tool-card:nth-child(1){animation-delay:.03s}.tool-card:nth-child(2){animation-delay:.06s}.tool-card:nth-child(3){animation-delay:.09s}
+    .tool-card:nth-child(4){animation-delay:.12s}.tool-card:nth-child(5){animation-delay:.15s}.tool-card:nth-child(6){animation-delay:.18s}
+    .tool-card:nth-child(7){animation-delay:.21s}.tool-card:nth-child(8){animation-delay:.24s}.tool-card:nth-child(9){animation-delay:.27s}
+    .tool-card:nth-child(10){animation-delay:.30s}
+
+    @media(max-width:700px){
+      nav,footer{padding:1rem 1.2rem}.hero{padding:3rem 1.2rem 2.5rem}.tools-wrap{padding:1.5rem 1.2rem}
+      h1{font-size:clamp(3rem,13vw,5rem)}.hero-stats{gap:1.5rem}.row2,.row3{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Lift<span>Lab</span></div>
+  <div class="nav-tag">Free · No Signup</div>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">Fitness Calculator Suite</div>
+  <h1>
+    <span class="outline">Train</span>
+    <span class="red">Smarter.</span>
+    <span>Lift More.</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-sub">10 free calculators for serious gym-goers. Macros, 1RM, TDEE, body fat, splits and more. Built for lifters. Zero ads, zero BS.</p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">10<span>×</span></div><div class="hstat-l">Free Tools</div></div>
+      <div class="hstat"><div class="hstat-n">0<span>$</span></div><div class="hstat-l">Forever</div></div>
+      <div class="hstat"><div class="hstat-n">0<span>s</span></div><div class="hstat-l">Signup</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="tools-wrap">
+  <div class="tw-head"><div class="tw-label">Arsenal — 10 Tools</div><div class="tw-line"></div></div>
+  <div class="tools-grid">
+    <button class="tool-card" onclick="O('tdee')"><div class="tc-num">01</div><span class="tc-icon">🔥</span><div class="tc-name">TDEE Calculator</div><div class="tc-desc">Total Daily Energy Expenditure. Your maintenance calories based on stats and activity. The foundation of any diet.</div><span class="tc-badge">Foundation</span></button>
+    <button class="tool-card" onclick="O('macro')"><div class="tc-num">02</div><span class="tc-icon">🥩</span><div class="tc-name">Macro Calculator</div><div class="tc-desc">Protein, carbs and fat targets for your goal — bulk, cut, or maintain. Visual breakdown included.</div><span class="tc-badge">Nutrition</span></button>
+    <button class="tool-card" onclick="O('orm')"><div class="tc-num">03</div><span class="tc-icon">🏋️</span><div class="tc-name">1RM Calculator</div><div class="tc-desc">Estimate your one-rep max from any rep range. Full percentage table with volume guides.</div><span class="tc-badge">Most Used</span></button>
+    <button class="tool-card" onclick="O('bf')"><div class="tc-num">04</div><span class="tc-icon">📏</span><div class="tc-name">Body Fat Estimator</div><div class="tc-desc">Navy Method BF% using neck, waist, and hip measurements. No calipers needed.</div><span class="tc-badge">Body Comp</span></button>
+    <button class="tool-card" onclick="O('bulk')"><div class="tc-num">05</div><span class="tc-icon">📈</span><div class="tc-name">Bulk / Cut Planner</div><div class="tc-desc">How long to bulk or cut to hit your goal. Realistic timeline with daily calorie targets.</div><span class="tc-badge">Planning</span></button>
+    <button class="tool-card" onclick="O('protein')"><div class="tc-num">06</div><span class="tc-icon">💊</span><div class="tc-name">Protein Intake Calc</div><div class="tc-desc">Daily protein target based on bodyweight, goal, and training intensity. Broken down per meal.</div><span class="tc-badge">Nutrition</span></button>
+    <button class="tool-card" onclick="O('split')"><div class="tc-num">07</div><span class="tc-icon">📅</span><div class="tc-name">Workout Split Builder</div><div class="tc-desc">PPL, Upper/Lower, Bro Split, or Full Body — built for your schedule and training days.</div><span class="tc-badge">Programming</span></button>
+    <button class="tool-card" onclick="O('wilks')"><div class="tc-num">08</div><span class="tc-icon">🏆</span><div class="tc-name">Wilks Score</div><div class="tc-desc">Compare your powerlifting total across bodyweights. The standard strength coefficient.</div><span class="tc-badge">Powerlifting</span></button>
+    <button class="tool-card" onclick="O('water')"><div class="tc-num">09</div><span class="tc-icon">💧</span><div class="tc-name">Water Intake Calc</div><div class="tc-desc">Daily hydration target adjusted for bodyweight, workout intensity, and climate.</div><span class="tc-badge">Recovery</span></button>
+    <button class="tool-card" onclick="O('rest')"><div class="tc-num">10</div><span class="tc-icon">😴</span><div class="tc-name">Recovery Planner</div><div class="tc-desc">Muscle group recovery times based on volume. Know exactly when you can hit each muscle again.</div><span class="tc-badge">Recovery</span></button>
+  </div>
+</div>
+
+<footer>
+  <div class="flogo">Lift<span>Lab</span></div>
+  <div class="ftxt">Free for lifters · No data · No ads · No excuses</div>
+</footer>
+
+<div class="pw" id="PW">
+  <div class="pbg" onclick="C()"></div>
+  <div class="panel">
+    <div class="phead"><div class="ptitle" id="PT"></div><button class="px" onclick="C()">✕</button></div>
+    <div class="pbody" id="PB"></div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=n=>String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+function RB(v,d,l){return`<div class="rbox"><div class="rl">${l}</div><div class="rv">${v}</div><div class="rd">${d}</div></div>`}
+
+function heights(){let o='';for(let f=4;f<=7;f++)for(let i=0;i<12;i++){const t=f*12+i;o+=`<option value="${t}"${t===70?' selected':''}>${f}'${i}"</option>`;}return o;}
+
+const TOOLS={
+  tdee:{t:'🔥 TDEE CALCULATOR',h:()=>`
+    <div class="row2"><div class="field"><label>Age</label><input type="number" id="age" placeholder="26"/></div><div class="field"><label>Sex</label><select id="sex"><option value="m">Male</option><option value="f">Female</option></select></div></div>
+    <div class="row2"><div class="field"><label>Weight (lbs)</label><input type="number" id="wt" placeholder="185"/></div><div class="field"><label>Height</label><select id="ht">${heights()}</select></div></div>
+    <div class="field"><label>Activity Level</label><select id="act"><option value="1.2">Sedentary (desk job, no gym)</option><option value="1.375">Lightly active (1–3x/week)</option><option value="1.55" selected>Moderately active (3–5x/week)</option><option value="1.725">Very active (6–7x/week)</option><option value="1.9">Athlete / 2x day</option></select></div>
+    <button class="btn" onclick="cTDEE()">Calculate TDEE</button><div id="R"></div>`},
+  macro:{t:'🥩 MACRO CALCULATOR',h:()=>`
+    <div class="row2"><div class="field"><label>Bodyweight (lbs)</label><input type="number" id="bw" placeholder="185"/></div><div class="field"><label>Goal</label><select id="goal"><option value="cut">Cutting (lose fat)</option><option value="maintain" selected>Maintaining</option><option value="bulk">Bulking (gain muscle)</option></select></div></div>
+    <div class="field"><label>Your TDEE (kcal) — use tool #1</label><input type="number" id="tdee_in" placeholder="2800"/></div>
+    <div class="field"><label>Training intensity</label><select id="intensity"><option value="low">Light (3x/week)</option><option value="med" selected>Moderate (4–5x/week)</option><option value="high">Heavy (6+ days)</option></select></div>
+    <button class="btn" onclick="cMacro()">Build My Macros</button><div id="R"></div>`},
+  orm:{t:'🏋️ ONE REP MAX CALCULATOR',h:()=>`
+    <div class="field"><label>Lift</label><select id="lft"><option>Squat</option><option>Bench Press</option><option>Deadlift</option><option>Overhead Press</option><option>Romanian Deadlift</option><option>Custom</option></select></div>
+    <div class="row2"><div class="field"><label>Weight Used (lbs)</label><input type="number" id="ow" placeholder="225"/></div><div class="field"><label>Reps Completed</label><input type="number" id="or_" placeholder="5" min="1" max="20"/></div></div>
+    <button class="btn" onclick="cORM()">Calculate 1RM</button><div id="R"></div>`},
+  bf:{t:'📏 BODY FAT ESTIMATOR',h:()=>`
+    <div class="row2"><div class="field"><label>Sex</label><select id="bfsex"><option value="m">Male</option><option value="f">Female</option></select></div><div class="field"><label>Height (inches)</label><input type="number" id="bfh" placeholder="70"/></div></div>
+    <div class="row2"><div class="field"><label>Neck (inches)</label><input type="number" id="neck" placeholder="15.5" step=".5"/></div><div class="field"><label>Waist (inches)</label><input type="number" id="waist" placeholder="34" step=".5"/></div></div>
+    <div class="field"><label>Hip (inches) — women only</label><input type="number" id="hip" placeholder="38" step=".5"/></div>
+    <button class="btn" onclick="cBF()">Estimate Body Fat</button><div id="R"></div>`},
+  bulk:{t:'📈 BULK / CUT PLANNER',h:()=>`
+    <div class="row2"><div class="field"><label>Current Weight (lbs)</label><input type="number" id="cw" placeholder="175"/></div><div class="field"><label>Goal Weight (lbs)</label><input type="number" id="gw" placeholder="190"/></div></div>
+    <div class="field"><label>Your TDEE (kcal)</label><input type="number" id="btdee" placeholder="2800"/></div>
+    <div class="field"><label>Pace</label><select id="pace"><option value="250">Slow (±0.5 lb/week)</option><option value="500" selected>Moderate (±1 lb/week)</option><option value="750">Aggressive (±1.5 lb/week)</option></select></div>
+    <button class="btn" onclick="cBulk()">Build My Plan</button><div id="R"></div>`},
+  protein:{t:'💊 PROTEIN INTAKE CALCULATOR',h:()=>`
+    <div class="row2"><div class="field"><label>Bodyweight (lbs)</label><input type="number" id="pbw" placeholder="185"/></div><div class="field"><label>Goal</label><select id="pg"><option value="maintain">Maintain muscle</option><option value="build" selected>Build muscle</option><option value="cut">Cutting (preserve muscle)</option><option value="athlete">High-performance</option></select></div></div>
+    <div class="field"><label>Training frequency</label><select id="pfreq"><option value="3">3x/week</option><option value="4" selected>4–5x/week</option><option value="6">6–7x/week</option></select></div>
+    <button class="btn" onclick="cProtein()">Calculate Protein</button><div id="R"></div>`},
+  split:{t:'📅 WORKOUT SPLIT BUILDER',h:()=>`
+    <div class="row2"><div class="field"><label>Training days/week</label><select id="days"><option value="3">3 days</option><option value="4" selected>4 days</option><option value="5">5 days</option><option value="6">6 days</option></select></div><div class="field"><label>Training style</label><select id="style"><option value="ppl">Push / Pull / Legs</option><option value="ul">Upper / Lower</option><option value="bro">Bro Split</option><option value="full">Full Body</option></select></div></div>
+    <button class="btn" onclick="cSplit()">Build My Split</button><div id="R"></div>`},
+  wilks:{t:'🏆 WILKS SCORE',h:()=>`
+    <div class="row2"><div class="field"><label>Sex</label><select id="wsex"><option value="m">Male</option><option value="f">Female</option></select></div><div class="field"><label>Bodyweight (lbs)</label><input type="number" id="wbw" placeholder="181"/></div></div>
+    <div class="row3"><div class="field"><label>Squat (lbs)</label><input type="number" id="wsq" placeholder="405"/></div><div class="field"><label>Bench (lbs)</label><input type="number" id="wbp" placeholder="275"/></div><div class="field"><label>Deadlift (lbs)</label><input type="number" id="wdl" placeholder="495"/></div></div>
+    <button class="btn" onclick="cWilks()">Calculate Wilks</button><div id="R"></div>`},
+  water:{t:'💧 WATER INTAKE CALCULATOR',h:()=>`
+    <div class="row2"><div class="field"><label>Bodyweight (lbs)</label><input type="number" id="wbw2" placeholder="185"/></div><div class="field"><label>Workout intensity</label><select id="wi"><option value="0">Rest day</option><option value="12">Light (45 min)</option><option value="16" selected>Moderate (lifting)</option><option value="24">Heavy (2h+)</option></select></div></div>
+    <div class="field"><label>Climate</label><select id="climate"><option value="0">Cool / Indoor gym</option><option value="8">Warm / Humid</option><option value="16">Hot / Heavy sweat</option></select></div>
+    <button class="btn" onclick="cWater()">Calculate Hydration</button><div id="R"></div>`},
+  rest:{t:'😴 RECOVERY PLANNER',h:()=>`
+    <div class="field"><label>Muscle groups trained today</label>
+      <div class="mg-grid" id="MG">${['Chest','Back','Shoulders','Biceps','Triceps','Quads','Hamstrings','Glutes','Calves','Core'].map(m=>`<div class="mg-item" onclick="this.classList.toggle('sel');this.querySelector('input').checked=!this.querySelector('input').checked"><input type="checkbox" value="${m}" style="width:auto;border:none;padding:0;accent-color:var(--red)"/>${m}</div>`).join('')}</div>
+    </div>
+    <div class="field" style="margin-top:.8rem"><label>Training volume</label><select id="vol"><option value="low">Light (&lt;15 sets)</option><option value="med" selected>Moderate (15–25)</option><option value="high">Heavy (25+ sets)</option></select></div>
+    <button class="btn" onclick="cRest()">Get Recovery Plan</button><div id="R"></div>`},
+};
+
+function O(k){$('PT').textContent=TOOLS[k].t;$('PB').innerHTML=TOOLS[k].h();$('PW').classList.add('open');}
+function C(){$('PW').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')C();});
+
+function cTDEE(){
+  const age=+$('age').value,sex=$('sex').value,wt=+$('wt').value*.453592,ht=+$('ht').value*2.54,act=+$('act').value;
+  if(!wt||!ht||!age)return;
+  const bmr=sex==='m'?(10*wt)+(6.25*ht)-(5*age)+5:(10*wt)+(6.25*ht)-(5*age)-161;
+  const tdee=bmr*act;
+  $('R').innerHTML=RB(`${fmt(tdee)} <span class="unit">kcal</span>`,`BMR: ${fmt(bmr)} kcal<br>Bulk: <strong style="color:var(--red)">${fmt(tdee+300)}</strong> · Maintain: <strong>${fmt(tdee)}</strong> · Cut: <strong>${fmt(tdee-500)}</strong>`,'Your Maintenance Calories');
+}
+
+function cMacro(){
+  const bw=+$('bw').value,goal=$('goal').value,tdee=+$('tdee_in').value||0,int_=$('intensity').value;
+  if(!bw)return;
+  const bwkg=bw*.453592,pRatio={low:.7,med:.85,high:1.0}[int_];
+  const protein=Math.round(bwkg*2.2*pRatio);
+  const cals=tdee>0?tdee+(goal==='bulk'?300:goal==='cut'?-500:0):bw*(goal==='bulk'?17:goal==='cut'?13:15);
+  const fat=Math.round(cals*.25/9),carbs=Math.round((cals-(protein*4)-(fat*9))/4);
+  const pP=Math.round(protein*4/cals*100),pC=Math.round(carbs*4/cals*100),pF=Math.round(fat*9/cals*100);
+  $('R').innerHTML=`<div class="rbox"><div class="rl">Daily Macros — ${goal.toUpperCase()}</div><div class="rv">${fmt(cals)} <span class="unit">kcal</span></div><div class="macro-bars">${mB('Protein',protein,'g',pP,'var(--red)')}${mB('Carbs',carbs,'g',pC,'#4facfe')}${mB('Fat',fat,'g',pF,'#ff9a3c')}</div><div class="rd">Per meal (3x): ${Math.round(protein/3)}g protein · ${Math.round(carbs/3)}g carbs · ${Math.round(fat/3)}g fat</div></div>`;
+}
+function mB(n,v,u,p,c){return`<div class="mbar"><div class="mbar-top"><span class="mbar-lbl">${n}</span><span class="mbar-val" style="color:${c}">${v}${u} <span style="color:var(--muted);font-size:.75rem">${p}%</span></span></div><div class="mbar-track"><div class="mbar-fill" style="width:${p}%;background:${c}"></div></div></div>`}
+
+function cORM(){
+  const w=+$('ow').value,r=+$('or_').value;
+  if(!w||!r)return;
+  if(r===1){$('R').innerHTML=RB(`${w} <span class="unit">lbs</span>`,'That IS your 1RM.','1RM');return;}
+  const ep=w*(1+r/30),br=w*(36/(37-r)),la=w*100/(101.3-2.67123*r),lo=w*Math.pow(r,.10);
+  const avg=Math.round((ep+br+la+lo)/4);
+  const rows=[100,95,90,85,80,75,70].map(p=>`<tr><td>${p}%</td><td class="hi">${Math.round(avg*p/100)} lbs</td><td style="color:var(--muted)">${p>=90?'1–2 reps':p>=80?'3–5 reps':p>=70?'6–8 reps':'8–12 reps'}</td></tr>`).join('');
+  $('R').innerHTML=`<div class="rbox"><div class="rl">Estimated 1RM — ${$('lft').value}</div><div class="rv">${avg} <span class="unit">lbs</span></div><div class="rd" style="margin-bottom:.8rem">Epley: ${Math.round(ep)} · Brzycki: ${Math.round(br)} · Lander: ${Math.round(la)}</div><table class="pr-table"><tr><th>%</th><th>Weight</th><th>Rep range</th></tr>${rows}</table></div>`;
+}
+
+function cBF(){
+  const sex=$('bfsex').value,h=+$('bfh').value,neck=+$('neck').value,waist=+$('waist').value,hip=+$('hip').value||0;
+  if(!h||!neck||!waist)return;
+  let bf=sex==='m'?86.010*Math.log10(waist-neck)-70.041*Math.log10(h)+36.76:163.205*Math.log10(waist+hip-neck)-97.684*Math.log10(h)-78.387;
+  bf=Math.max(3,Math.min(50,bf));
+  const cat=sex==='m'?(bf<6?'Essential Fat':bf<14?'Athletic':bf<18?'Fit':bf<25?'Average':'Obese'):(bf<14?'Essential Fat':bf<21?'Athletic':bf<25?'Fit':bf<32?'Average':'Obese');
+  const col=bf<15?'var(--red)':bf<25?'#c8f135':'var(--muted)';
+  $('R').innerHTML=RB(`${bf.toFixed(1)}<span class="unit">%</span>`,`Category: <strong style="color:${col}">${cat}</strong><br>US Navy Method · measurements in inches`,'Estimated Body Fat');
+}
+
+function cBulk(){
+  const cw=+$('cw').value,gw=+$('gw').value,tdee=+$('btdee').value,surplus=+$('pace').value;
+  if(!cw||!gw||!tdee)return;
+  const diff=Math.abs(gw-cw),dir=gw>cw?'BULK':'CUT';
+  const weeks=Math.round(diff*(3500/surplus));
+  const dailyCals=dir==='BULK'?tdee+surplus:tdee-surplus;
+  const endDate=new Date(Date.now()+weeks*7*864e5).toLocaleDateString('en-US',{month:'short',year:'numeric'});
+  $('R').innerHTML=RB(`${weeks} <span class="unit">weeks</span>`,`Direction: <strong style="color:var(--red)">${dir}</strong> · ${diff} lbs to ${dir==='BULK'?'gain':'lose'}<br>Daily calories: <strong>${fmt(dailyCals)}</strong> kcal · Target: ${endDate}`,'Timeline to Goal');
+}
+
+function cProtein(){
+  const bw=+$('pbw').value,goal=$('pg').value,freq=+$('pfreq').value;
+  if(!bw)return;
+  const bwkg=bw*.453592,ratio={maintain:1.4,build:2.0,cut:2.4,athlete:2.8}[goal],adj=freq>=6?1.1:1;
+  const grams=Math.round(bwkg*ratio*adj);
+  $('R').innerHTML=RB(`${grams}<span class="unit">g/day</span>`,`${(grams/bw).toFixed(2)}g per lb bodyweight<br>3 meals: <strong style="color:var(--red)">${Math.round(grams/3)}g</strong> each · 4 meals: <strong>${Math.round(grams/4)}g</strong> each`,'Daily Protein Target');
+}
+
+function cSplit(){
+  const days=+$('days').value,style=$('style').value;
+  const splits={
+    ppl:{3:['Push','Pull','Legs'],4:['Push A','Pull A','Legs','Push B + Pull B'],5:['Push A','Pull A','Legs A','Push B','Pull B'],6:['Push A','Pull A','Legs A','Push B','Pull B','Legs B']},
+    ul:{3:['Upper A','Lower A','Upper B'],4:['Upper A','Lower A','Upper B','Lower B'],5:['Upper A','Lower A','Upper B','Lower B','Full Body'],6:['Upper A','Lower A','Upper B','Lower B','Upper C','Lower C']},
+    bro:{3:['Chest + Tris','Back + Bis','Legs + Shoulders'],4:['Chest','Back','Shoulders + Arms','Legs'],5:['Chest','Back','Shoulders','Arms','Legs'],6:['Chest','Back','Shoulders','Legs','Arms','Core']},
+    full:{3:['Full Body A','Full Body B','Full Body C'],4:['Full A','Full B','Full A','Full B'],5:['Full A','Full B','Full C','Full A','Full B'],6:['Full A','Full B','Full C','Full A','Full B','Full C']},
+  };
+  const plan=splits[style][days];
+  const dn=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let sched=[],di=0;
+  for(let i=0;i<7;i++){if(di<days){sched.push({day:dn[i],label:plan[di%plan.length],lift:true});di++;}else sched.push({day:dn[i],label:'Rest',lift:false});}
+  const grid=sched.map(d=>`<div class="sday ${d.lift?'lift':'rest'}"><div>${d.day}</div><div style="font-size:.5rem;margin-top:.2rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.lift?d.label.split(' ')[0]:'—'}</div></div>`).join('');
+  const details=sched.filter(d=>d.lift).map(d=>`<div style="display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--border);font-size:.85rem"><span style="color:var(--muted)">${d.day}</span><strong>${d.label}</strong></div>`).join('');
+  $('R').innerHTML=`<div class="rbox"><div class="rl">${days}-Day ${style.toUpperCase()} Split</div><div class="split-grid">${grid}</div>${details}</div>`;
+}
+
+function cWilks(){
+  const sex=$('wsex').value,bw=+$('wbw').value*.453592;
+  const sq=(+$('wsq').value||0)*.453592,bp=(+$('wbp').value||0)*.453592,dl=(+$('wdl').value||0)*.453592;
+  const total=sq+bp+dl;if(!total||!bw)return;
+  const mc=sex==='m'?[-216.0475144,16.2606339,-.002388645,-.00113732,7.01863e-6,-1.291e-8]:[-594.31747925955,27.23842536447,-.82112226871,.00930733913,-4.731582e-5,9.054e-8];
+  const denom=mc[0]+mc[1]*bw+mc[2]*bw**2+mc[3]*bw**3+mc[4]*bw**4+mc[5]*bw**5;
+  const w=(500/denom*total).toFixed(2);
+  const rank=w>=140?'Elite':w>=120?'Master':w>=100?'Advanced':w>=80?'Intermediate':'Beginner';
+  const col=w>=120?'var(--red)':w>=100?'#c8f135':'var(--chalk)';
+  $('R').innerHTML=RB(`<span class="acc">${w}</span>`,`Rank: <strong style="color:${col}">${rank}</strong> · Total: ${fmt(total/.453592)} lbs`,'Wilks Coefficient');
+}
+
+function cWater(){
+  const bw=+$('wbw2').value,wi=+$('wi').value,cl=+$('climate').value;
+  if(!bw)return;
+  const oz=Math.round(bw*.67+wi+cl);
+  $('R').innerHTML=RB(`${oz}<span class="unit"> oz</span>`,`${(oz*.0296).toFixed(1)}L · ${(oz/16.9).toFixed(1)} bottles (16.9oz)<br>Pre-workout: 16oz · During: 6–8oz/20min · Post: 24oz per lb lost`,'Daily Hydration Target');
+}
+
+function cRest(){
+  const checked=[...document.querySelectorAll('.mg-item.sel input')].map(i=>i.value);
+  if(!checked.length){$('R').innerHTML=RB('—','Select muscle groups above','Recovery');return;}
+  const rec={Chest:48,Back:48,Shoulders:48,Biceps:36,Triceps:36,Quads:72,Hamstrings:72,Glutes:72,Calves:36,Core:24};
+  const vm={low:.8,med:1,high:1.25}[$('vol').value];
+  const rows=checked.map(m=>{const h=Math.round(rec[m]*vm),d=(h/24).toFixed(1),c=h>=72?'var(--red)':h>=48?'#ff9a3c':'#c8f135';return`<div style="display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--border);font-size:.85rem"><span>${m}</span><strong style="color:${c}">${h}h (${d}d)</strong></div>`;}).join('');
+  const maxH=Math.max(...checked.map(m=>Math.round(rec[m]*vm)));
+  $('R').innerHTML=`<div class="rbox"><div class="rl">Recovery Times</div><div class="rv">${maxH}<span class="unit">h max</span></div><div style="margin:.8rem 0">${rows}</div><div class="rd">Aim for 8h sleep · protein within 2h post-workout · stay hydrated</div></div>`;
+}
+</script>
+</body>
+</html>
